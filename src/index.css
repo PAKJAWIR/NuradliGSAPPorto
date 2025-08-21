@@ -1,0 +1,54 @@
+@import "tailwindcss";
+
+:root {
+  padding: 0;
+  margin: 0;
+  font-family: "Montserrat", sans-serif;
+  background-color: #fefcfb;
+  font-synthesis: none;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE & Edge */
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  box-sizing: border-box;
+  scroll-behavior: smooth;
+}
+
+html,
+body {
+  overflow-x: hidden;
+}
+
+@theme {
+  --color-warna1: #fefcfb;
+  --color-warna2: #212121;
+  --color-warna3: #001f54;
+}
+
+::selection {
+  background: #212121;
+  color: #fefcfb;
+}
+
+@keyframes marquee {
+  from {
+    transform: translateX(0%);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.animate-marquee {
+  animation: marquee 15s linear infinite;
+}
+
+.highlight-bg {
+  position: absolute;
+  inset: 0;
+  background-color: #212121;
+  clip-path: inset(0 100% 0 0);
+  z-index: -1;
+  transition: clip-path 0.5s ease;
+}
