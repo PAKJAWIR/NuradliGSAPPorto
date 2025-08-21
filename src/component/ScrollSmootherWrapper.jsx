@@ -29,7 +29,7 @@ function ScrollSmootherWrapper({ children }) {
 
   return (
     <div className="relative" ref={wrapperRef} id="smooth-wrapper">
-      <div className="relative" ref={contentRef} id="smooth-content">
+      <div className="relative md:will-change-transform" ref={contentRef} id="smooth-content">
         {children}
       </div>
     </div>
