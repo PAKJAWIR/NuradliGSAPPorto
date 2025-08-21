@@ -98,7 +98,7 @@ function Services() {
   );
 
   return (
-    <div ref={container} className="scroller w-full h-fit bg-warna1 px-5 md:px-10 py-5">
+    <div ref={container} className="gpu-fix scroller w-full h-full md:h-fit bg-warna1 px-5 md:px-10 py-15">
       <div ref={parSection} className="flex flex-col justify-center items-start w-full h-fit md:h-65 gap-5 md:gap-10">
         {/* My Services */}
         <div ref={myServiceRef} className="flex items-start justify-start w-full h-fit overflow-hidden">
