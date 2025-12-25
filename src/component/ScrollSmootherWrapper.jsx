@@ -15,12 +15,13 @@ function ScrollSmootherWrapper({ children }) {
 
     if (!isMobile) {
       const smoother = ScrollSmoother.create({
-        smooth: 3,
+        smooth: 1.5,
         effects: true,
         normalizeScroll: true,
         wrapper: wrapperRef.current,
         content: contentRef.current,
         smoothTouch: 0,
+        snap: true,
       });
 
       return () => smoother.kill();

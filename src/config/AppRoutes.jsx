@@ -1,16 +1,23 @@
-import { Routes, Route } from "react-router-dom";
-import Home from "../pages/Home";
-import About from "../pages/About";
-import Portfolio from "../pages/Portofolio";
-import NotFound from "../pages/NotFound";
+import { Routes, Route, useLocation } from "react-router-dom";
+import Home from "../component/pages/Home";
+import About from "../component/pages/About";
+import Works from "../component/pages/Works";
+import NotFound from "../component/pages/NotFound";
+import Navbar from "../component/organism/Navbar";
 
-export default function AppRouter() {
+export default function AppRoutes() {
+  const location = useLocation();
+  const isHome = location.pathname === "/";
+
   return (
-    <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/about" element={<About />} />
-      <Route path="/portfolio" element={<Portfolio />} />
-      <Route path="/portfolio" element={<NotFound />} />
-    </Routes>
+    <>
+      {!isHome && <Navbar />}
+      <Routes location={location}>
+        <Route path="/" element={<Home />} />
+        <Route path="/about" element={<About />} />
+        <Route path="/works" element={<Works />} />
+        <Route path="*" element={<NotFound />} />
+      </Routes>
+    </>
   );
 }
