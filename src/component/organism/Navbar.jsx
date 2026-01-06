@@ -24,7 +24,7 @@ const Navbar = forwardRef((_, ref) => {
         trigger: navRef.current,
         start: "bottom-=80 top",
         end: "+=5000",
-        pin: true,
+        pin: isMobile ? false : true,
         pinSpacing: false,
       });
 
@@ -62,7 +62,7 @@ const Navbar = forwardRef((_, ref) => {
           btnDesktopRef.current?.closeMenu();
           btnMobileRef.current?.closeMenu();
         }}
-        className={'fixed inset-0 z-1 bg-warna2/30 ${isMobile ? "w-screen h-screen fixed" : ""}'}
+        className={`fixed inset-0 z-1 bg-warna2/30 ${isMobile ? "h-screen" : ""}`}
       />
 
       {/* MOBILE NAV */}
@@ -71,7 +71,7 @@ const Navbar = forwardRef((_, ref) => {
       </div>
 
       {/* DESKTOP NAV */}
-      <div ref={navRef} className="absolute bottom-0 right-0 z-20 hidden md:block">
+      <div ref={navRef} className="absolute bottom-1 right-1 z-20 hidden md:block">
         <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
       </div>
     </div>

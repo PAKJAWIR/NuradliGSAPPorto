@@ -58,7 +58,7 @@ function AboutMeLandingPage() {
     { scope: container }
   );
   return (
-    <div ref={container} className=" px-5 w-screen h-screen flex flex-col gap-10 items-center justify-center bg-warna1">
+    <div ref={container} className="p-5 w-screen h-screen flex flex-col items-center justify-center bg-warna1">
       <div ref={textMoveRef} className="flex items-center justify-center h-fit w-fit smooth-item">
         <LinkText
           ref={textRef}
@@ -67,7 +67,7 @@ function AboutMeLandingPage() {
           text="
        I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not
         only look great but also feel intuitive and enjoyable to use."
-          className="text-lg md:text-4xl text-center font-bold md:font-semibold"
+          className="text-warna2 text-xl md:text-4xl text-center font-bold md:font-medium"
         />
       </div>
     </div>

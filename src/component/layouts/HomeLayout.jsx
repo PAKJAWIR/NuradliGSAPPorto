@@ -3,6 +3,7 @@ import Navbar from "../organism/Navbar";
 import Hero from "../organism/Hero";
 import AboutMeLandingPage from "../organism/AboutMeLandingPage";
 import MyPhilosophyLP from "../organism/MyPhilosophyLP";
+import SpanHoverAnimations from "../atoms/SpanHoverAnimations";
 
 function HomeLayout() {
   const navbarRef = useRef(null);
@@ -11,9 +12,8 @@ function HomeLayout() {
     <>
       <Navbar ref={navbarRef} />
       <Hero navbarRef={navbarRef} />
-      <AboutMeLandingPage />
-      <MyPhilosophyLP/>
-      <div className="bg-warna1 h-screen w-screen"></div>
+      <div className="bg-warna1 h-screen w-screen">
+      </div>
     </>
   );
 }

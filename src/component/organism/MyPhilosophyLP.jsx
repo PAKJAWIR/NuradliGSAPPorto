@@ -45,9 +45,9 @@ function MyPhilosophyLP() {
       <div className="flex flex-col gap-2.5 h-full w-full  items-center justify-center">
         <div className="relative  flex flex-col items-center justify-center w-full h-full">
           <div className="bg-warna2 h-50 w-full md:h-115 md:w-115"></div>
-          <h1 className="p-5 absolute mix-blend-difference text-center w-85 md:w-215 text-warna1 font-bold text-4xl md:text-8xl">The Simpler Things Are, The Happier You Are</h1>
+          <h1 className="absolute mix-blend-difference text-center w-85 md:w-215 text-warna1 font-bold text-3xl md:text-3xl">The Simpler Things Are, The Happier You Are</h1>
         </div>
-        <div className="flex flex-col items-center justify-start gap-7 h-full w-full p-5">
+        <div className="flex flex-col items-center justify-start gap-7 h-full w-full">
           <LinkText
             ref={textRef}
             className="text-center text-warna2 w-full md:w-100  text-xs md:text-sm"
@@ -56,7 +56,7 @@ function MyPhilosophyLP() {
             text="
           I believe the best work comes from balancing creativity with functionality. My goal is to craft designs and code that look elegant, work seamlessly, and leave users with a sense of ease and satisfaction."
           />
-          <HoverArrow ref={textLiRef} duration={1.5} text="About Me" className="uppercase text-xs font-bold" link={"/about"} />
+          <HoverArrow ref={textLiRef} duration={1.5} text="About Me" className="text-warna2 uppercase text-xs font-bold" link={"/about"} />
         </div>
       </div>
     </div>

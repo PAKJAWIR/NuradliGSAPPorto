@@ -12,12 +12,12 @@ const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "" }, 
 
   useImperativeHandle(ref, () => ({
     animateClose: () => {
-      gsap.to(spanRef.current, { rotate: 0, duration: 0.3, ease: "power2.out" });
-      gsap.to(span2Ref.current, { rotate: 90, duration: 0.3, ease: "power2.out" });
+      gsap.to(spanRef.current, { rotate: 0, duration: 0.4, ease: "power3.in" });
+      gsap.to(span2Ref.current, { rotate: 0, duration: 0.4, ease: "power3.in" });
     },
     animateOpen: () => {
-      gsap.to(spanRef.current, { rotate: 45, duration: 0.3, ease: "power2.out" });
-      gsap.to(span2Ref.current, { rotate: 135, duration: 0.3, ease: "power2.out" });
+      gsap.to(spanRef.current, { rotate: -45, duration: 0.4, ease: "power2.out" });
+      gsap.to(span2Ref.current, { rotate: 45, duration: 0.4, ease: "power2.out" });
     },
   }));
 
@@ -26,47 +26,49 @@ const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "" }, 
     if (isMobile) return;
     if (isClicked) return;
     gsap.to(spanRef.current, {
-      rotate: 90,
+      y: 2,
       ease: "power2.out",
-      duration: 0.3,
+      duration: 0.4,
     });
 
     gsap.to(span2Ref.current, {
-      rotate: 180,
+      y: -2,
       ease: "power2.out",
-      duration: 0.3,
+      duration: 0.4,
     });
   };
   const mouseLeaves = () => {
     if (isMobile) return;
     if (isClicked) return;
     gsap.to(spanRef.current, {
-      rotate: 0,
+      y: -2,
       ease: "power2.out",
-      duration: 0.3,
+      duration: 0.4,
     });
 
     gsap.to(span2Ref.current, {
-      rotate: 90,
+      y: 2,
       ease: "power2.out",
-      duration: 0.3,
+      duration: 0.4,
     });
   };
 
   useGSAP(
     () => {
-      if (!isMobile && !isClicked) return;
+      gsap.set(spanRef.current, { y: -2 });
+      gsap.set(span2Ref.current, { y: 2 });
 
+      // MOBILE ANIMATION
       gsap.to(spanRef.current, {
-        rotate: isClicked ? 45 : 90,
-        ease: "power2.out",
-        duration: 0.3,
+        rotate: isClicked ? -45 : 0,
+        y: isClicked ? 0 : -2,
+        duration: 0.4,
       });
 
       gsap.to(span2Ref.current, {
-        rotate: isClicked ? 135 : 180,
-        ease: "power2.out",
-        duration: 0.3,
+        rotate: isClicked ? 45 : 0,
+        y: isClicked ? 0 : 2,
+        duration: 0.4,
       });
     },
     { dependencies: [isClicked] }
@@ -74,9 +76,9 @@ const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "" }, 
 
   return (
     <div className={className}>
-      <button onClick={onClick} onMouseEnter={mouseEnters} onMouseLeave={mouseLeaves} className="relative overflow-hidden smooth-item cursor-pointer flex items-center justify-center w-5 h-5">
-        <span ref={spanRef} className="absolute w-4.5 h-0.5 bg-warna1 "></span>
-        <span ref={span2Ref} className="absolute w-4.5 h-0.5 bg-warna1  rotate-90"></span>
+      <button onClick={onClick} onMouseEnter={mouseEnters} onMouseLeave={mouseLeaves} className=" relative w-7 h-7 flex items-center justify-center">
+        <span ref={spanRef} className="absolute w-6 h-[1.6px] bg-warna1"></span>
+        <span ref={span2Ref} className="absolute w-6  h-[1.6px] bg-warna1"></span>
       </button>
     </div>
   );
