@@ -2,7 +2,6 @@ import { useRef, useState } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import Silk from "../../animations/Silk";
 import { useDevice } from "../../context/DeviceProvider";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -12,13 +11,10 @@ function Hero({ navbarRef }) {
   const silkPin = useRef(null);
 
   const { isMobile } = useDevice();
-  const [showSilk, setShowSilk] = useState(false);
 
   useGSAP(
     () => {
       if (isMobile) return;
-
-      requestAnimationFrame(() => setShowSilk(true));
 
       gsap.fromTo(
         silkPin.current,
@@ -41,12 +37,12 @@ function Hero({ navbarRef }) {
             anticipatePin: 1,
             pinSpacing: true,
           },
-        }
+        },
       );
 
       const triggerBtn = ScrollTrigger.create({
         trigger: container.current,
-        start: "bottom-=95 center-=50",
+        start: "bottom-=120 center-=50",
         end: "top-=50 top",
         onEnter: () => navbarRef.current?.animateMove("up"),
         onEnterBack: () => navbarRef.current?.animateMove("down"),
@@ -54,26 +50,29 @@ function Hero({ navbarRef }) {
 
       return () => triggerBtn.kill();
     },
-    { scope: container }
+    { scope: container },
   );
 
   return (
     <div ref={container} className="flex flex-col bg-warna1 w-full h-screen overflow-hidden z-1">
-      <div className="relative h-full w-full flex flex-col items-center justify-center overflow-hidden">
+      <div className="relative h-full w-full flex flex-col items-center justify-center overflow-hidden ">
         <div className=" relative h-full w-full flex items-center justify-center overflow-hidden">
           <div className="relative overflow-hidden flex items-center justify-center w-full h-full">
             {/* ===== MOBILE VIDEO ===== */}
-            <video preload="metadata" className="absolute inset-0 w-full h-full object-cover md:hidden" src="/img/silkvd.webm" autoPlay muted loop plays-Inline />
+            <video className="absolute inset-0 w-full h-full object-cover md:hidden pointer-events-none " src="/img/silkvd.webm" autoPlay muted loop playsInline />
 
             {/* ===== DESKTOP SILK ===== */}
-            <div ref={silkPin} className="hidden md:block relative w-full h-full md:w-[1025px] md:h-[535px] overflow-hidden ">
-              <video className="absolute inset-0 w-screen h-screen object-cover object-center" src="/img/silkvd.webm" autoPlay muted loop playsInline preload="metadata" />
+            <div ref={silkPin} className="hidden md:block relative w-full h-full lg:w-[1025px] lg:h-[535px] overflow-hidden md:rounded-lg">
+              <video className="absolute inset-0 w-screen h-screen object-cover object-center pointer-events-none " src="/img/silkvd.webm" autoPlay muted loop playsInline />
             </div>
           </div>
-
-          <h1 className="absolute text-warna1 text-lg md:text-2xl mix-blend-difference">NURADLI</h1>
+          <div className="absolute inset-0 flex h-full w-full items-center justify-center">
+            <h1 className=" font-bold text-warna1 text-md md:text-lg mix-blend-difference tracking-[5px]">NURADLI</h1>{" "}
+          </div>
         </div>
-        <span className="text-warna1 uppercase text-[9px] md:text-[11px] font-medium absolute bottom-5 mix-blend-difference">Scroll for more</span>
+        <div className="absolute bottom-0 h-10 w-full flex items-center justify-center">
+          <h3 className="text-warna1  uppercase text-[9px] md:text-[10px] font-regular text-center w-full items-center justify-center  mix-blend-difference">Scroll for more</h3>
+        </div>
       </div>
     </div>
   );

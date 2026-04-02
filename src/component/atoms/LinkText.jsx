@@ -1,119 +1,179 @@
-import { useRef, forwardRef, useImperativeHandle } from "react";
+import { useRef, forwardRef, useImperativeHandle, useEffect } from "react";
 import { useGSAP } from "@gsap/react";
 import SplitType from "split-type";
 import gsap from "gsap";
 import { useDevice } from "../../context/DeviceProvider";
 import { Link } from "react-router-dom";
 
-const LinkText = forwardRef(({ text, link, stagger = 0.1, duration = 1, className = "", splitType = "lines" }, ref) => {
-  const textRef = useRef(null);
-  const cloneRef = useRef(null);
-  let splitInstance = null;
+const LinkText = forwardRef(
+  (
+    {
+      as: Component = "span",
+      text,
+      link,
+      stagger = 0.1,
+      staggerBack = -0.1,
+      duration = 1,
+      offsetY = 300,
+      className = "",
+      splitType = "lines",
+      enableAnimation = true, 
+    },
+    ref,
+  ) => {
+    const textRef = useRef(null);
+    const cloneRef = useRef(null);
+    const splitInstance = useRef(null);
 
-  const { isMobile } = useDevice();
+    const { isMobile } = useDevice();
 
-  // =============================
-  // Programmatic animations (PC + Mobile overlay)
-  // =============================
-  const anim = () => {
-    if (splitInstance) splitInstance.revert();
+    const shouldAnimate = enableAnimation;
 
-    splitInstance = new SplitType(textRef.current, { types: splitType, tagName: "span" });
-    const targets = splitInstance[splitType];
+    /* =============================
+       OPEN ANIMATION
+    ============================= */
+    const anim = () => {
+      if (!shouldAnimate) return;
 
-    gsap.set([textRef.current, cloneRef.current], { autoAlpha: 1 });
+      splitInstance.current?.revert();
 
-    gsap.from(targets, {
-      y: "200%",
-      duration,
-      ease: "power2.out",
-      autoAlpha: 0,
-      stagger: stagger,
-    });
+      splitInstance.current = new SplitType(textRef.current, {
+        types: splitType,
+        tagName: Component,
+        lineClass: "split-line",
+      });
 
-    return () => splitInstance.revert();
-  };
+      const targets = splitInstance.current[splitType];
 
-  const anim2 = () => {
-    if (splitInstance) splitInstance.revert();
+      gsap.set(targets, { yPercent: offsetY, autoAlpha: 0 });
+      gsap.set([textRef.current, cloneRef.current], { autoAlpha: 1 });
 
-    splitInstance = new SplitType(textRef.current, { types: splitType, tagName: "span" });
-    const targets = splitInstance[splitType];
+      gsap.to(targets, {
+        yPercent: 0,
+        duration,
+        ease: "power2.out",
+        autoAlpha: 1,
+        stagger,
+      });
+    };
 
-    gsap.set([textRef.current, cloneRef.current], { autoAlpha: 1 });
+    /* =============================
+       CLOSE ANIMATION
+    ============================= */
+    const anim2 = () => {
+      if (!shouldAnimate) return;
 
-    gsap.to(targets, {
-      y: "200%",
-      duration,
-      ease: "power2.in",
-      stagger: stagger,
-      onComplete: () => gsap.set(textRef.current, { autoAlpha: 0 }),
-    });
+      splitInstance.current?.revert();
 
-    return () => splitInstance.revert();
-  };
+      splitInstance.current = new SplitType(textRef.current, {
+        types: splitType,
+        tagName: Component,
+        lineClass: "split-line",
+      });
 
-  // =============================
-  // Hover animations (PC only)
-  // =============================
-  const mouseEnter = () => {
-    if (isMobile) return;
+      const targets = splitInstance.current[splitType];
 
-    gsap.to(textRef.current, {
-      y: -textRef.current.offsetHeight,
-      duration: 0.8,
-      ease: "power1.out",
-    });
+      gsap.set(targets, { yPercent: 0, autoAlpha: 1 });
 
-    gsap.to(cloneRef.current, {
-      y: -textRef.current.offsetHeight,
-      duration: 0.8,
-      ease: "power1.out",
-    });
-  };
+      gsap.to(targets, {
+        yPercent: offsetY,
+        duration,
+        ease: "power2.in",
+        stagger: staggerBack,
+        onComplete: () => gsap.set(textRef.current, { autoAlpha: 0 }),
+      });
+    };
 
-  const mouseLeave = () => {
-    if (isMobile) return;
+    /* =============================
+       SPLIT INITIALIZATION
+    ============================= */
+    useEffect(() => {
+      if (!textRef.current) return;
 
-    gsap.to([textRef.current, cloneRef.current], {
-      y: 0,
-      duration: 0.8,
-      ease: "power4.out",
-    });
-  };
+      if (splitInstance.current) {
+        splitInstance.current.revert();
+      }
 
-  useImperativeHandle(ref, () => ({
-    animate: anim,
-    animate2: anim2,
-    element: textRef.current,
-  }));
-
-  useGSAP(
-    () => {
-      if (isMobile) {
-        gsap.set([textRef.current, cloneRef.current], { autoAlpha: 1, y: 0 });
+      if (!shouldAnimate) {
+        gsap.set(textRef.current, {
+          clearProps: "all",
+          autoAlpha: 1,
+          y: 0,
+        });
         return;
       }
 
-      gsap.set([textRef.current, cloneRef.current], { autoAlpha: 0 });
-    },
-    { scope: textRef }
-  );
+      splitInstance.current = new SplitType(textRef.current, {
+        types: splitType,
+        tagName: Component,
+        lineClass: "split-line",
+      });
 
-  return link ? (
-    <Link onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} to={link} className={`relative flex w-fit overflow-hidden ${className} ${isMobile ? "pointer-events-auto" : ""}`}>
-      <span ref={textRef} className="relative z-10 block overflow-hidden">
+      const targets = splitInstance.current[splitType];
+      gsap.set(targets, { yPercent: offsetY, autoAlpha: 0 });
+    }, [text, shouldAnimate]);
+
+    /* =============================
+       HOVER (DESKTOP ONLY)
+    ============================= */
+    const mouseEnter = () => {
+      if (!shouldAnimate) return;
+
+      gsap.to([textRef.current, cloneRef.current], {
+        yPercent: -100,
+        duration: 0.8,
+        ease: "power1.out",
+      });
+    };
+
+    const mouseLeave = () => {
+      if (!shouldAnimate) return;
+
+      gsap.to([textRef.current, cloneRef.current], {
+        yPercent: 0,
+        duration: 0.8,
+        ease: "power4.out",
+      });
+    };
+
+    useImperativeHandle(ref, () => ({
+      animate: anim,
+      animate2: anim2,
+      element: textRef.current,
+    }));
+
+    /* =============================
+       BASELINE VISIBILITY
+    ============================= */
+    useGSAP(
+      () => {
+        if (!shouldAnimate) {
+          gsap.set(textRef.current, { autoAlpha: 1 });
+          return;
+        }
+
+        gsap.set([textRef.current, cloneRef.current], {
+          autoAlpha: 0,
+        });
+      },
+      { scope: textRef },
+    );
+
+    return link ? (
+      <Link onMouseEnter={mouseEnter} onMouseLeave={mouseLeave} to={link} className={`relative flex w-fit overflow-hidden ${className}`}>
+        <Component ref={textRef} className="relative z-10 block overflow-hidden">
+          {text}
+        </Component>
+        <Component ref={cloneRef} className="absolute left-0 top-full block overflow-hidden">
+          {text}
+        </Component>
+      </Link>
+    ) : (
+      <Component ref={textRef} className={`inline-block h-fit overflow-hidden ${className}`}>
         {text}
-      </span>
-      <span ref={cloneRef} className="absolute left-0 top-full block overflow-hidden">
-        {text}
-      </span>
-    </Link>
-  ) : (
-    <div ref={textRef} className={`inline-block overflow-hidden ${className}`}>
-      {text}
-    </div>
-  );
-});
+      </Component>
+    );
+  },
+);
 
 export default LinkText;

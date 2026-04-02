@@ -1,76 +1,55 @@
+import { useRef } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { useRef } from "react";
 import LinkText from "../atoms/LinkText";
-import { useDevice } from "../../context/DeviceProvider";
+import ParallaxAnim from "../../animations/ParallaxAnim";
+import HoverArrow from "../../animations/HoverArrow";
 
 gsap.registerPlugin(ScrollTrigger);
 
 function AboutMeLandingPage() {
   const container = useRef(null);
-  const textRef = useRef(null);
-  const textMoveRef = useRef(null);
-  const { isMobile } = useDevice();
 
-  useGSAP(
-    () => {
-      gsap.set(textRef.current.element, {
-        autoAlpha: 0,
-      });
-
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: container.current,
-          start: isMobile ? "top+=150 center+=100" : "top+=100 center+=100",
-          markers: false,
-          toggleActions: "play none none none",
-        },
-      });
-
-      tl.call(() => {
-        textRef.current.animate();
-      });
-
-      tl.to(textRef.current.element, {
-        autoAlpha: 1,
-      });
-
-      if (!isMobile) {
-        gsap.fromTo(
-          textMoveRef.current,
-          {
-            y: 0,
-          },
-          {
-            y: -35,
-            ease: "none",
-            scrollTrigger: {
-              trigger: container.current,
-              start: isMobile ? "center center+=100" : "top+=100 center+=100",
-              end: "center top",
-              scrub: 1,
-            },
-          }
-        );
-      }
-    },
-    { scope: container }
-  );
   return (
-    <div ref={container} className="p-5 w-screen h-screen flex flex-col items-center justify-center bg-warna1">
-      <div ref={textMoveRef} className="flex items-center justify-center h-fit w-fit smooth-item">
-        <LinkText
-          ref={textRef}
-          duration={1.5}
-          stagger={isMobile ? 0.15 : 0.26}
-          text="
-       I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not
-        only look great but also feel intuitive and enjoyable to use."
-          className="text-warna2 text-xl md:text-4xl text-center font-bold md:font-medium"
-        />
+    <section ref={container} className="relative  min-h-screen w-screen bg-warna1 py-24">
+      {/* Parent */}
+      <div className="h-fit w-full flex flex-col  gap-16 lg:gap-24">
+        {/* Top */}
+        <div className="h-60 md:h-60 w-full flex flex-col gap-8 md:gap-0 md:flex-row px-4 md:px-6 lg:px-8">
+          <div className="flex justify-start items-center w-full h-full ">
+            <h1 className="text-4xl w-80 md:w-full lg:w-4xl md:text-5xl lg:text-7xl font-black">SIMPLICITY IS WHERE GOOD DESIGN LIVES</h1>
+          </div>
+          <div className="flex justify-start items-center w-80 md:w-108 lg:w-xl max-w-full h-full  ">
+            <div className="flex h-1/2 w-full items-center md:items-start">
+              <p className="text-xs md:text-sm ">
+                My name is Nuradli, a Front-End Developer and Graphic Designer. I design and build digital experiences where simplicity, elegance, and usability work together to create lasting impressions.
+              </p>
+            </div>
+          </div>
+        </div>
+        {/* Center */}
+        <div className="h-[48vh] md:h-[54vh] lg:h-[76vh] w-full flex ">
+          <ParallaxAnim src="/img/nuradliabout.png" alt="Nuradli" containerClass="w-full h-full rounded-xs" className="w-[125%] h-[125%]  md:object-right lg:object-center" start="top bottom" end="bottom top" scrub={true} />
+        </div>
+
+        {/* Bottom */}
+        <div className="h-[40vh] w-full flex flex-col gap-16 md:gap-0 md:flex-row px-4 md:px-6 lg:px-8">
+          <div className="flex justify-start items-start h-full w-full ">
+            <h2 className="text-3xl md:text-3xl lg:text-5xl font-black ">
+              LESS NOISE <br /> MORE MEANING
+            </h2>
+          </div>
+          <div className="flex flex-col justify-start items-start gap-8 md:gap-12 h-full md:w-108 lg:w-xl ">
+            <p className="text-xs md:text-sm">
+              I bring ideas to life through clean code and thoughtful design, focusing on clarity, smooth interactions, and meaningful details. Every project is built to feel intuitive, purposeful, and enjoyable to use.
+            </p>
+            <p className="text-xs md:text-sm">It’s not just about making things look good — it’s about helping people feel good when they use them. Simplicity isn’t just design — it’s how we connect better with technology.</p>
+            <HoverArrow text="Start a Project" className="text-xs md:text-sm font-bold uppercase" as="h3" enableAnimation={false} />
+          </div>
+        </div>
       </div>
-    </div>
+    </section>
   );
 }
 

@@ -5,7 +5,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function ParallaxAnim({ src = "", alt = "", className = "", containerClass = "", start = "top bottom", end = "bottom top", from = { yPercent: -1, scale: 1.1, rotateX: 5 }, to = { yPercent: 0, scale: 1, rotateX: 0 }, scrub = true }) {
+function ParallaxAnim({ src = "", alt = "", className = "", containerClass = "", start = "top bottom", end = "bottom top", from = { yPercent: -20, scale: 1.05, rotateX: 5 }, to = { yPercent: 10, scale: 1, rotateX: 0 }, scrub = true }) {
   const containerRef = useRef(null);
   const imgRef = useRef(null);
 
@@ -30,7 +30,7 @@ function ParallaxAnim({ src = "", alt = "", className = "", containerClass = "",
     // 💡DEV NOTE PENTING: Ukuran container WAJIB LEBIH KECIL dari isi (gambar),
     // supaya efek depth illusion / parallax benar-benar terasa saat discroll.
     <div ref={containerRef} className={`relative overflow-hidden ${containerClass}`}>
-      <img ref={imgRef} src={src} alt={alt} className={`absolute object-cover object-center ${className}`} />
+      <img ref={imgRef} src={src} alt={alt} className={`absolute object-cover ${className}`} />
     </div>
   );
 }

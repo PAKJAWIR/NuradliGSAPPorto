@@ -1,0 +1,48 @@
+[
+  {
+    "id": 1,
+    "title": "Hands Of Devil",
+    "category": "Shirt",
+    "projects": "Personal",
+    "date": "2025-06-15",
+    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
+    "image": "/img/Hands.jpg"
+  },
+
+  {
+    "id": 2,
+    "title": "Guts Berserk",
+    "category": "Shirt",
+    "projects": "Personal",
+    "date": "2025-06-15",
+    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
+    "image": "/img/Guts.jpg"
+  },
+  {
+    "id": 3,
+    "title": "Miyamoto Musashi",
+    "category": "Shirt",
+    "projects": "Personal",
+    "date": "2025-06-15",
+    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
+    "image": "/img/Miyamoto.jpg"
+  },
+  {
+    "id": 4,
+    "title": "Adaptation",
+    "category": "Shirt",
+    "projects": "Personal",
+    "date": "2025-06-15",
+    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
+    "image": "/img/Adapt.jpg"
+  },
+  {
+    "id": 5,
+    "title": "Revolution Shirt",
+    "category": "Shirt",
+    "projects": "Personal",
+    "date": "2025-06-15",
+    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
+    "image": "/img/baju.png"
+  }
+]

@@ -4,7 +4,7 @@ import { useDevice } from "../../context/DeviceProvider";
 
 import { useRef, useState, useImperativeHandle, forwardRef } from "react";
 
-const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "" }, ref) => {
+const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "", spanColor = "bg-warna1", spanHeight = "h-[1.6px]", spanWidth = "w-6" }, ref) => {
   const spanRef = useRef(null);
   const span2Ref = useRef(null);
   const { isMobile } = useDevice();
@@ -71,14 +71,14 @@ const SpanHoverAnimations = forwardRef(({ isClicked, onClick, className = "" }, 
         duration: 0.4,
       });
     },
-    { dependencies: [isClicked] }
+    { dependencies: [isClicked] },
   );
 
   return (
     <div className={className}>
-      <button onClick={onClick} onMouseEnter={mouseEnters} onMouseLeave={mouseLeaves} className=" relative w-7 h-7 flex items-center justify-center">
-        <span ref={spanRef} className="absolute w-6 h-[1.6px] bg-warna1"></span>
-        <span ref={span2Ref} className="absolute w-6  h-[1.6px] bg-warna1"></span>
+      <button onClick={onClick} onMouseEnter={mouseEnters} onMouseLeave={mouseLeaves} className="cursor-pointer relative w-7 h-7 flex items-center justify-center">
+        <span ref={spanRef} className={`absolute ${spanWidth} ${spanHeight} ${spanColor} will-change-transform backface-hidden`} />
+        <span ref={span2Ref} className={`absolute ${spanWidth} ${spanHeight} ${spanColor} will-change-transform backface-hidden`} />
       </button>
     </div>
   );

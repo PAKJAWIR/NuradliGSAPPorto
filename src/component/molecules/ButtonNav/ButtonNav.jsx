@@ -6,8 +6,8 @@ import { useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LinkText from "../atoms/LinkText";
-import SpanHoverAnimations from "../atoms/SpanHoverAnimations";
+import LinkText from "../../atoms/LinkText";
+import SpanHoverAnimations from "../../atoms/SpanHoverAnimations";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -43,9 +43,10 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
     () => {
       const trig = ScrollTrigger.create({
         trigger: container.current,
-        start: "bottom-=150 center-=50",
+        start: "center-=200 top",
         end: "top-=50 top",
         toggleActions: "play none reverse none",
+
         onEnter: () => setActiveClick("btnClickVer2"),
         onLeaveBack: () => setActiveClick("btnClick"),
       });
@@ -67,7 +68,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
 
       return () => trig.kill();
     },
-    { scope: container }
+    { scope: container },
   );
 
   // --------------------------------------------------
@@ -117,7 +118,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           duration: 1.5,
           ease: "elastic.out(1, 1)",
         },
-        0
+        0,
       );
 
       tl.call(
@@ -126,7 +127,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           menuRefs.current.forEach((ref) => ref.animate());
         },
         null,
-        "-=1.3"
+        "-=1.3",
       );
     } else {
       // CLOSE
@@ -144,7 +145,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           duration: 1.6,
           ease: "elastic.out(1, 1)",
         },
-        "+=0.45"
+        "+=0.45",
       );
 
       tl.to(
@@ -154,7 +155,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           duration: 1.6,
           ease: "elastic.out(1, 1)",
         },
-        "<"
+        "<",
       );
     }
 
@@ -189,7 +190,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         duration: 1.6,
         ease: "elastic.out(1, 1)",
       },
-      "+=0.45"
+      "+=0.45",
     );
 
     tl.to(
@@ -199,7 +200,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         duration: 1.6,
         ease: "elastic.out(1, 1)",
       },
-      "<"
+      "<",
     );
     tl.call(() => {
       spanRef.current?.animateClose();

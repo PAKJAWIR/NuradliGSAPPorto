@@ -3,8 +3,8 @@ import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-import ButtonNav from "../molecules/ButtonNav";
-import ButtonNavMobile from "../molecules/ButtonNavMobile";
+import ButtonNav from "../molecules/ButtonNav/ButtonNav";
+import ButtonNavMobile from "../molecules/ButtonNav/ButtonNavMobile";
 import { useDevice } from "../../context/DeviceProvider";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -37,12 +37,14 @@ const Navbar = forwardRef((_, ref) => {
 
       if (isMobile) return;
 
+      // Trigger Pin
       const pinNav = ScrollTrigger.create({
         trigger: navRef.current,
-        start: "bottom+=650 top",
-        end: "+=5000",
+        start: "bottom-=76 top",
+        end: "max",
         pin: true,
         pinSpacing: true,
+        markers: false,
         invalidateOnRefresh: true,
       });
 
@@ -51,7 +53,7 @@ const Navbar = forwardRef((_, ref) => {
         start: "top top",
         end: "bottom top",
         scrub: true,
-        pin: true,
+        pin: false,
         anticipatePin: 1,
         pinSpacing: true,
         invalidateOnRefresh: true,
@@ -67,7 +69,7 @@ const Navbar = forwardRef((_, ref) => {
         pinDesktop.kill();
       };
     },
-    { scope: desktopContainer }
+    { scope: desktopContainer },
   );
 
   // ================= OVERLAY HANDLER =================
@@ -96,46 +98,48 @@ const Navbar = forwardRef((_, ref) => {
   // ================= RENDER =================
   return (
     <>
-      {/* DESKTOP OVERLAY */}
-      <div
-        ref={overlayDesktopRef}
-        onClick={() => {
-          overlayOnOffClick(false);
-          btnDesktopRef.current?.closeMenu();
-        }}
-        className="hidden md:block fixed inset-0 z-10 bg-warna2/30"
-      />
+      <nav>
+        {/* DESKTOP OVERLAY */}
+        <div
+          ref={overlayDesktopRef}
+          onClick={() => {
+            overlayOnOffClick(false);
+            btnDesktopRef.current?.closeMenu();
+          }}
+          className="hidden lg:block fixed inset-0 z-10 bg-warna2/30"
+        />
 
-      {/* MOBILE OVERLAY */}
-      <div
-        ref={overlayMobileRef}
-        onClick={() => {
-          overlayOnOffClick(false);
-          btnMobileRef.current?.closeMenu();
-        }}
-        className="block md:hidden fixed inset-0 z-10 bg-warna2/30 h-screen w-screen"
-      />
+        {/* MOBILE OVERLAY */}
+        <div
+          ref={overlayMobileRef}
+          onClick={() => {
+            overlayOnOffClick(false);
+            btnMobileRef.current?.closeMenu();
+          }}
+          className="block lg:hidden fixed inset-0 z-10 bg-warna2/30 h-screen w-screen"
+        />
 
-      {/* ROOT UI LAYER */}
-      <div className="fixed inset-0 w-screen h-screen z-30 pointer-events-none">
-        {/* ================= MOBILE ================= */}
-        {isMobile && (
-          <div ref={mobileContainer} className="absolute inset-0 pointer-events-none">
-            <div className="absolute bottom-5 right-5 pointer-events-auto">
-              <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
+        {/* ROOT UI LAYER */}
+        <div className="fixed inset-0 w-screen h-screen z-30 pointer-events-none">
+          {/* ================= MOBILE ================= */}
+          {isMobile && (
+            <div ref={mobileContainer} className="absolute inset-0 pointer-events-none">
+              <div className="absolute bottom-5 right-5 pointer-events-auto">
+                <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
+              </div>
             </div>
-          </div>
-        )}
+          )}
 
-        {/* ================= DESKTOP ================= */}
-        {!isMobile && (
-          <div ref={desktopContainer} className="absolute inset-0 w-screen h-screen z-5">
-            <div ref={navRef} className="absolute right-0 bottom-0 pointer-events-auto">
-              <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
+          {/* ================= DESKTOP ================= */}
+          {!isMobile && (
+            <div ref={desktopContainer} className="absolute inset-0 w-screen h-screen z-5">
+              <div ref={navRef} className="absolute right-0 bottom-0 pointer-events-auto">
+                <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
+              </div>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      </nav>
     </>
   );
 });

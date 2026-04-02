@@ -1,8 +1,8 @@
 import { useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
-import SpanHoverAnimations from "../atoms/SpanHoverAnimations";
-import LinkText from "../atoms/LinkText";
+import SpanHoverAnimations from "../../atoms/SpanHoverAnimations";
+import LinkText from "../../atoms/LinkText";
 
 // =====================================================
 // ButtonNavMobile
@@ -156,7 +156,7 @@ const ButtonNavMobile = forwardRef(({ onToggleOverlay }, ref) => {
   // Render
   // ===============================================
   return (
-    <div ref={container} className="fixed bottom-5 right-5 z-50">
+    <div ref={container} className="absolute bottom-0 right-0 z-50">
       <div className="relative flex items-end justify-end">
         {/* Overlay panel */}
         <div ref={overlayRef} className="absolute bg-warna2 rounded-full  overflow-hidden">
