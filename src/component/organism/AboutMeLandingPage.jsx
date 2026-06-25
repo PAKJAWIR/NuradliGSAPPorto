@@ -89,10 +89,10 @@ function AboutMeLandingPage() {
   );
 
   return (
-    <section ref={container} className="flex flex-col gap-16 md:gap-4 relative min-h-dvh w-screen bg-warna1 p-4 md:p-6">
+    <section ref={container} className="flex flex-col gap-16 md:gap-4 relative min-h-svh w-screen bg-warna1 p-4 md:p-6">
       {/* About Intro Section */}
-      <div className=" flex flex-col justify-center lg:flex-row h-fit lg:h-[84dvh] w-full ">
-        <div className="flex justify-start items-end py-8 lg:items-center w-1/2 h-[20dvh] md:h-[48%] lg:h-1/2">
+      <div className=" flex flex-col justify-center lg:flex-row h-fit lg:h-[84svh] w-full ">
+        <div className="flex justify-start items-end py-8 lg:items-center w-1/2 h-[20svh] md:h-[48%] lg:h-1/2">
           <h2 className="uppercase font-bold text-sm md:text-base mb-6">About</h2>
         </div>
 
@@ -120,7 +120,7 @@ function AboutMeLandingPage() {
       </div>
 
       {/* Status & Gallery Section */}
-      <div ref={bottomRef} className=" flex flex-row min-h-dvh md:h-dvh w-full py-12 lg:py-0">
+      <div ref={bottomRef} className=" flex flex-row min-h-svh md:h-svh w-full py-12 lg:py-0">
         <div className="w-full h-full flex flex-col">
           <div className="flex items-start lg:items-end justify-between h-20 w-full">
             <LiveClock />

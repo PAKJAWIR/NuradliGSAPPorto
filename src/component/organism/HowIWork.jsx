@@ -87,7 +87,7 @@ function HowIWork() {
       // ==========================================
       if (isMobile && gridWrapper) {
         // Wrapper dipasang relative agar posisi absolute anak-anaknya presisi
-        gsap.set(gridWrapper, { position: "relative", height: "38dvh" });
+        gsap.set(gridWrapper, { position: "relative", height: "38svh" });
 
         // Setup awal tumpukan kartu
         gsap.set(targets, {
@@ -95,14 +95,14 @@ function HowIWork() {
           inset: 0,
           transformOrigin: "top center", // Tumpuan mengecil di tengah atas agar rapi
           zIndex: (i) => (i === 0 ? 1 : 5 - i),
-          yPercent: (i) => (i === 0 ? 0 : 124),
+          yPercent: (i) => (i === 0 ? 0 : 110),
         });
 
         const tlMobile = gsap.timeline({
           scrollTrigger: {
             trigger: container.current,
             start: "top top",
-            end: `+=${cards.length * 120}%`,
+            end: `+=${cards.length * 100}%`,
             pin: true,
             scrub: 1,
             invalidateOnRefresh: true,
@@ -131,7 +131,7 @@ function HowIWork() {
             tlMobile.to(
               targets[j],
               {
-                scale: 1 - depth * 0.08, // Kartu langsung di bawahnya jadi 0.97
+                scale: 1 - depth * 0.1, // Kartu langsung di bawahnya jadi 0.97
                 ease: "none",
               },
               label,
@@ -144,14 +144,14 @@ function HowIWork() {
   );
 
   return (
-    <div ref={container} className="min-h-dvh md:h-dvh lg:h-[110dvh] my-4 md:my-0 w-screen p-4 md:p-6 overflow-hidden">
+    <div ref={container} className="min-h-svh md:h-svh lg:h-[110svh] my-4 md:my-0 w-screen p-4 md:p-6 overflow-hidden">
       {/* Parents */}
-      <div className="flex flex-col justify-around gap-10 md:gap-0 w-full h-full">
+      <div className="flex flex-col justify-around gap-6 md:gap-0 w-full h-full">
         {/* Top Section */}
         <div className="flex items-center h-fit md:h-full w-full ">
           <div className="flex flex-col-reverse gap-10 md:flex-row h-fit justify-between w-full">
             {/* Text Left */}
-            <div className="flex flex-col gap-14 items-start justify-center h-full w-full">
+            <div className="flex flex-col gap-12 items-start justify-center h-full w-full">
               <TextHeadingAnimation
                 text={header.heading}
                 startDesktop="top center+=18%"
@@ -161,7 +161,7 @@ function HowIWork() {
                 className="text-xl md:text-2xl lg:text-3xl font-bold w-full md:w-[66dvw] lg:w-[60%] will-change-opacity inline-block"
                 containerClassName="!h-fit !justify-start !items-start"
               />
-              <p className="text-sm w-[84dvw] md:w-[48dvw] lg:w-[28dvw]">{header.description}</p>
+              <p className="text-xs w-[84dvw] md:w-[48dvw] lg:w-[28dvw]">{header.description}</p>
             </div>
             {/* Text Right */}
             <div className="flex h-full w-fit md:w-1/5 justify-end">
@@ -173,10 +173,10 @@ function HowIWork() {
         </div>
 
         {/* Bottom Cards Wrapper */}
-        <div ref={cardContainer} className="flex h-fit lg:h-[60dvh] w-full pt-4 md:pt-8">
+        <div ref={cardContainer} className="flex h-fit lg:h-[60svh] w-full pt-4 md:pt-8">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 w-full h-full">
             {cards.map((card) => (
-              <div key={card.id} className="shadow-md md:shadow-sm workflow-card flex flex-col justify-between bg-warna3 rounded-md p-4 md:p-6 h-full min-h-[30dvh] md:min-h-[26dvh] will-change-transform">
+              <div key={card.id} className="shadow-md md:shadow-sm workflow-card flex flex-col justify-around bg-warna3 rounded-md p-4 md:p-6 h-full min-h-[20svh] md:min-h-[26svh] will-change-transform">
                 {/* Number & Title */}
                 <div className="flex flex-col gap-4">
                   <span className="text-xs text-warna2/70 font-medium">{String(card.id).padStart(2, "0")}.</span>

@@ -394,7 +394,7 @@ function SelectedProjectssNew() {
     <section className="flex items-center justify-center h-fit lg:min-h-screen w-screen bg-warna1 p-4 md:p-6">
       <div className="flex flex-col gap-24 md:gap-12 lg:gap-26 h-fit w-full">
         {/* Heading */}
-        <div className="flex flex-col-reverse md:flex-row items-start md:items-end justify-between gap-10 h-fit md:h-[18vh] lg:h-[30vh] w-full">
+        <div className="flex flex-col-reverse md:flex-row items-start md:items-end justify-between gap-10 h-fit md:h-[18svh] lg:h-[30svh] w-full">
           <TextHeadingAnimation
             text="This selection presents a range of digital works shaped through careful observation and deliberate craft. Each piece reflects a process of translating abstract ideas into tangible experiences."
             startDesktop="top center+=18%"
@@ -409,7 +409,7 @@ function SelectedProjectssNew() {
         </div>
 
         {/* Projects Wrapper */}
-        <div className="flex items-center justify-center h-fit md:h-[66vh] lg:h-fit w-full bg-warna1">
+        <div className="flex items-center justify-center h-fit md:h-[66svh] lg:h-fit w-full bg-warna1">
           <div className="relative flex flex-col h-fit w-full" onMouseLeave={handleLeave}>
             {/* Desktop Hover Preview */}
             {enableHover && (
@@ -459,7 +459,7 @@ function SelectedProjectssNew() {
                   if (!enableHover) return;
                   handleDirectionalHover(i, e);
                 }}
-                className="relative z-1 flex items-center md:items-center h-[14dvh] md:h-38 w-full overflow-hidden bg-warna1 p-2 md:p-4 lg:p-6 cursor-pointer"
+                className="relative z-1 flex items-center md:items-center h-[14svh] md:h-38 w-full overflow-hidden bg-warna1 p-2 md:p-4 lg:p-6 cursor-pointer"
               >
                 {/* Overlay */}
                 <div ref={(el) => (overlayRefs.current[i] = el)} className="absolute inset-0 z-0 bg-warna3" />

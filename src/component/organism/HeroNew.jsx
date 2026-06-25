@@ -33,7 +33,7 @@ function HeroNew({ navbarRef }) {
   const activeVideoSrc = isMobile ? "/img/Rotatevids.webm" : "/img/vids.webm";
 
   return (
-    <section ref={container} className="relative bg-warna1 h-[100dvh] w-screen px-4 py-6 md:p-6 overflow-hidden">
+    <section ref={container} className="relative bg-warna1 h-svh w-screen px-4 py-6 md:p-6 overflow-hidden">
       {/* OPTIMASI: Menggunakan satu atribut src langsung.
         Atribut 'key' memaksa React me-remount tag video tepat saat mode layar berubah tanpa perlu refresh manual.
       */}

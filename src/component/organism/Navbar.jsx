@@ -9,10 +9,12 @@ import { useDevice } from "../../context/DeviceProvider";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// SOLUSI JITTER: Mengunci resize koordinat animasi global GSAP
+ScrollTrigger.config({ ignoreMobileResize: true });
+
 const Navbar = forwardRef((_, ref) => {
   // ================= REFS =================
   const desktopContainer = useRef(null);
-  const mobileContainer = useRef(null);
   const navRef = useRef(null);
   const btnDesktopRef = useRef(null);
   const btnMobileRef = useRef(null);
@@ -34,7 +36,7 @@ const Navbar = forwardRef((_, ref) => {
 
       if (isTouchDevice) return;
 
-      // ================= NAV PIN =================
+      // ================= NAV PIN (DESKTOP) =================
       const pinNav = ScrollTrigger.create({
         trigger: navRef.current,
         start: "bottom-=76 top",
@@ -50,13 +52,9 @@ const Navbar = forwardRef((_, ref) => {
         start: "top top",
         end: "bottom top",
         scrub: true,
-        // FIX: Hapus anticipatePin dan pinSpacing karena pin-nya false
         invalidateOnRefresh: true,
         refreshPriority: 1,
       });
-
-      // FIX: Hapus requestAnimationFrame(() => ScrollTrigger.refresh())
-      // Biarkan GSAP yang mengatur refresh cycle secara natural saat load selesai
 
       return () => {
         pinNav.kill();
@@ -83,7 +81,7 @@ const Navbar = forwardRef((_, ref) => {
       pointerEvents: openState ? "auto" : "none",
       duration: 1,
       ease: "power3.out",
-      lazy: true, // OPTIMASI: Defer read/write DOM
+      lazy: true,
     });
   };
 
@@ -96,6 +94,7 @@ const Navbar = forwardRef((_, ref) => {
   // ================= RENDER =================
   return (
     <nav>
+      {/* Overlay Desktop */}
       <div
         ref={overlayDesktopRef}
         onClick={() => {
@@ -105,6 +104,7 @@ const Navbar = forwardRef((_, ref) => {
         className="hidden lg:block fixed inset-0 z-10 bg-warna2/40"
       />
 
+      {/* Overlay Mobile */}
       <div
         ref={overlayMobileRef}
         onClick={() => {
@@ -114,23 +114,23 @@ const Navbar = forwardRef((_, ref) => {
         className="block lg:hidden fixed inset-0 z-10 h-screen w-screen bg-warna2/30"
       />
 
-      <div className="fixed inset-0 z-30 h-dvh w-screen pointer-events-none">
-        {isTouchDevice && (
-          <div ref={mobileContainer} className="absolute inset-0 pointer-events-none">
-            <div className="absolute bottom-5 right-5 pointer-events-auto">
-              <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
-            </div>
-          </div>
-        )}
+      {/* JALUR MOBILE: Langsung fixed di kanan bawah layar fisik, lepas dari glitch height parent */}
+      {isTouchDevice && (
+        <div className="fixed bottom-5 right-5 z-30 pointer-events-auto">
+          <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
+        </div>
+      )}
 
-        {!isTouchDevice && (
+      {/* JALUR DESKTOP: Tetap menggunakan struktur asli kamu */}
+      {!isTouchDevice && (
+        <div className="fixed inset-0 z-30 h-screen w-screen pointer-events-none">
           <div ref={desktopContainer} className="absolute inset-0 z-5 h-screen w-screen">
             <div ref={navRef} className="absolute bottom-0 right-0 pointer-events-auto">
               <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
             </div>
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </nav>
   );
 });

@@ -127,7 +127,7 @@ function Faq() {
   });
 
   return (
-    <section className="flex items-start justify-center h-dvh md:h-fit lg:h-screen w-screen p-4 md:p-6 bg-warna1">
+    <section className="flex items-start justify-center h-svh md:h-fit lg:h-screen w-screen p-4 md:p-6 bg-warna1">
       <div className="flex flex-col md:gap-8 items-center justify-around md:justify-center lg:flex-row h-full w-full">
         {/* TITLE SECTION */}
         <div className="flex flex-col items-start justify-start md:justify-end h-[28vh] md:h-[20vh] lg:h-full w-full">
@@ -143,7 +143,7 @@ function Faq() {
         </div>
 
         {/* FAQ LIST */}
-        <div className="flex flex-col items-center justify-center h-[54dvh] md:h-[40dvh] lg:h-full w-full">
+        <div className="flex flex-col items-center justify-center h-[54svh] md:h-[40svh] lg:h-full w-full">
           {faqs.map((faq, index) => (
             <button
               key={faq.id || index}

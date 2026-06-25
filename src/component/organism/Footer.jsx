@@ -2,7 +2,7 @@ import { FaGithub, FaInstagram, FaLinkedin } from "react-icons/fa";
 
 function Footer() {
   return (
-    <footer className=" h-[48vh] md:h-[40vh] lg:h-[56dvh] w-screen bg-warna2  p-4 md:p-6 py-6">
+    <footer className=" h-[48vh] md:h-[40vh] lg:h-[56svh] w-screen bg-warna2  p-4 md:p-6 py-6">
       <div className="flex flex-col-reverse lg:flex-row gap-4 justify-between h-full w-full items-end ">
         {/* Title */}
         <div className="flex flex-row justify-start gap-4 items-end  h-fit md:h-full w-full md:w-full lg:w-fit ">
