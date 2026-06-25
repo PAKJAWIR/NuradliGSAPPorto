@@ -13,69 +13,66 @@ const Navbar = forwardRef((_, ref) => {
   // ================= REFS =================
   const desktopContainer = useRef(null);
   const mobileContainer = useRef(null);
-
   const navRef = useRef(null);
   const btnDesktopRef = useRef(null);
   const btnMobileRef = useRef(null);
-
   const overlayDesktopRef = useRef(null);
   const overlayMobileRef = useRef(null);
-
   const isOverlayOpen = useRef(false);
 
   // ================= DEVICE =================
-  const { isMobile } = useDevice();
+  const { isMobile, isTablet } = useDevice();
+  const isTouchDevice = isMobile || isTablet;
 
   // ================= GSAP =================
   useGSAP(
     () => {
-      // INITIAL OVERLAY STATE
       gsap.set([overlayDesktopRef.current, overlayMobileRef.current], {
         autoAlpha: 0,
         pointerEvents: "none",
       });
 
-      if (isMobile) return;
+      if (isTouchDevice) return;
 
-      // Trigger Pin
+      // ================= NAV PIN =================
       const pinNav = ScrollTrigger.create({
         trigger: navRef.current,
         start: "bottom-=76 top",
         end: "max",
         pin: true,
         pinSpacing: true,
-        markers: false,
         invalidateOnRefresh: true,
       });
 
+      // ================= DESKTOP SCROLL =================
       const pinDesktop = ScrollTrigger.create({
         trigger: desktopContainer.current,
         start: "top top",
         end: "bottom top",
         scrub: true,
-        pin: false,
-        anticipatePin: 1,
-        pinSpacing: true,
+        // FIX: Hapus anticipatePin dan pinSpacing karena pin-nya false
         invalidateOnRefresh: true,
         refreshPriority: 1,
       });
 
-      requestAnimationFrame(() => {
-        ScrollTrigger.refresh();
-      });
-      // CLEANUP (INI PENTING)
+      // FIX: Hapus requestAnimationFrame(() => ScrollTrigger.refresh())
+      // Biarkan GSAP yang mengatur refresh cycle secara natural saat load selesai
+
       return () => {
         pinNav.kill();
         pinDesktop.kill();
       };
     },
-    { scope: desktopContainer },
+    {
+      scope: desktopContainer,
+      dependencies: [isTouchDevice],
+    },
   );
 
   // ================= OVERLAY HANDLER =================
   const overlayOnOffClick = (openState) => {
-    const activeBtn = isMobile ? btnMobileRef.current : btnDesktopRef.current;
-    const activeOverlay = isMobile ? overlayMobileRef.current : overlayDesktopRef.current;
+    const activeBtn = isTouchDevice ? btnMobileRef.current : btnDesktopRef.current;
+    const activeOverlay = isTouchDevice ? overlayMobileRef.current : overlayDesktopRef.current;
 
     if (activeBtn?.isAnimating) return;
 
@@ -84,8 +81,9 @@ const Navbar = forwardRef((_, ref) => {
     gsap.to(activeOverlay, {
       autoAlpha: openState ? 1 : 0,
       pointerEvents: openState ? "auto" : "none",
-      duration: 0.3,
-      ease: "power2.out",
+      duration: 1,
+      ease: "power3.out",
+      lazy: true, // OPTIMASI: Defer read/write DOM
     });
   };
 
@@ -97,50 +95,43 @@ const Navbar = forwardRef((_, ref) => {
 
   // ================= RENDER =================
   return (
-    <>
-      <nav>
-        {/* DESKTOP OVERLAY */}
-        <div
-          ref={overlayDesktopRef}
-          onClick={() => {
-            overlayOnOffClick(false);
-            btnDesktopRef.current?.closeMenu();
-          }}
-          className="hidden lg:block fixed inset-0 z-10 bg-warna2/30"
-        />
+    <nav>
+      <div
+        ref={overlayDesktopRef}
+        onClick={() => {
+          overlayOnOffClick(false);
+          btnDesktopRef.current?.closeMenu();
+        }}
+        className="hidden lg:block fixed inset-0 z-10 bg-warna2/40"
+      />
 
-        {/* MOBILE OVERLAY */}
-        <div
-          ref={overlayMobileRef}
-          onClick={() => {
-            overlayOnOffClick(false);
-            btnMobileRef.current?.closeMenu();
-          }}
-          className="block lg:hidden fixed inset-0 z-10 bg-warna2/30 h-screen w-screen"
-        />
+      <div
+        ref={overlayMobileRef}
+        onClick={() => {
+          overlayOnOffClick(false);
+          btnMobileRef.current?.closeMenu();
+        }}
+        className="block lg:hidden fixed inset-0 z-10 h-screen w-screen bg-warna2/30"
+      />
 
-        {/* ROOT UI LAYER */}
-        <div className="fixed inset-0 w-screen h-screen z-30 pointer-events-none">
-          {/* ================= MOBILE ================= */}
-          {isMobile && (
-            <div ref={mobileContainer} className="absolute inset-0 pointer-events-none">
-              <div className="absolute bottom-5 right-5 pointer-events-auto">
-                <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
-              </div>
+      <div className="fixed inset-0 z-30 h-dvh w-screen pointer-events-none">
+        {isTouchDevice && (
+          <div ref={mobileContainer} className="absolute inset-0 pointer-events-none">
+            <div className="absolute bottom-5 right-5 pointer-events-auto">
+              <ButtonNavMobile ref={btnMobileRef} onToggleOverlay={overlayOnOffClick} />
             </div>
-          )}
+          </div>
+        )}
 
-          {/* ================= DESKTOP ================= */}
-          {!isMobile && (
-            <div ref={desktopContainer} className="absolute inset-0 w-screen h-screen z-5">
-              <div ref={navRef} className="absolute right-0 bottom-0 pointer-events-auto">
-                <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
-              </div>
+        {!isTouchDevice && (
+          <div ref={desktopContainer} className="absolute inset-0 z-5 h-screen w-screen">
+            <div ref={navRef} className="absolute bottom-0 right-0 pointer-events-auto">
+              <ButtonNav ref={btnDesktopRef} onToggleOverlay={overlayOnOffClick} />
             </div>
-          )}
-        </div>
-      </nav>
-    </>
+          </div>
+        )}
+      </div>
+    </nav>
   );
 });
 

@@ -5,18 +5,23 @@ import { ScrollSmoother } from "gsap/all";
 import { useRef } from "react";
 import { useProjects } from "../context/ProjectContext";
 import { useDevice } from "../context/DeviceProvider";
+import { useFaq } from "../context/FaqContext";
 
 gsap.registerPlugin(ScrollTrigger, ScrollSmoother);
 
 function ScrollSmootherWrapper({ children }) {
   const { isProjectFullyLoaded } = useProjects();
+  const { isFaqsFullyLoaded } = useFaq();
   const wrapperRef = useRef(null);
   const contentRef = useRef(null);
-  const { isMobile } = useDevice();
+  const { isTablet, isMobile } = useDevice();
+
+  const isLoaded = isProjectFullyLoaded || isFaqsFullyLoaded;
+
   useGSAP(() => {
-    if (!isMobile) {
+    if (!isTablet && !isMobile) {
       const smoother = ScrollSmoother.create({
-        smooth: 1.7,
+        smooth: 1.4,
         effects: true,
         normalizeScroll: true,
         wrapper: wrapperRef.current,
@@ -32,9 +37,9 @@ function ScrollSmootherWrapper({ children }) {
   // Pause smoother when project detail is active
   useGSAP(
     () => {
-      ScrollSmoother.get()?.paused(isProjectFullyLoaded);
+      ScrollSmoother.get()?.paused(isLoaded);
     },
-    { dependencies: [isProjectFullyLoaded] },
+    { dependencies: [isLoaded] },
   );
 
   return (

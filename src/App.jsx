@@ -5,19 +5,28 @@ import AppRoutes from "./config/AppRoutes";
 import ProjectsDetail from "./animations/ProjectsDetail";
 import { ProjectProvider } from "./context/ProjectContext";
 import Footer from "./component/organism/Footer";
+import { FaqProvider } from "./context/FaqContext";
+import Faq from "./component/organism/Faq";
+import FaqDetails from "./animations/FaqDetails";
 
 function App() {
   return (
     <>
       <BrowserRouter>
         <DeviceProvider>
-          <ProjectProvider>
-            <ProjectsDetail />
-            <ScrollSmootherWrapper>
-              <AppRoutes />
-              <Footer />
-            </ScrollSmootherWrapper>
-          </ProjectProvider>
+          <FaqProvider>
+            <ProjectProvider>
+              {/* MODALS OUTSIDE SMOOTHER */}
+              <ProjectsDetail />
+              <FaqDetails />
+
+              {/* SMOOTHER */}
+              <ScrollSmootherWrapper>
+                <AppRoutes />
+                <Footer />
+              </ScrollSmootherWrapper>
+            </ProjectProvider>
+          </FaqProvider>
         </DeviceProvider>
       </BrowserRouter>
     </>

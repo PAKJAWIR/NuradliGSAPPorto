@@ -1,48 +1,48 @@
 [
   {
     "id": 1,
-    "title": "Hands Of Devil",
+    "title": "Abstract",
     "category": "Shirt",
-    "projects": "Personal",
+    "projects": "August 2025",
     "date": "2025-06-15",
-    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
-    "image": "/img/Hands.jpg"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at diam magna. Nulla facilisi. Fusce euismod elementum magna in porttitor. Vestibulum faucibus ipsum ipsum, at dignissim quam dapibus eget. Aenean ante nunc, elementum non feugiat sit amet, consequat quis massa. Praesent id facilisis orci. Proin eget turpis ac turpis feugiat convallis. Curabitur sagittis magna eget felis euismod porta.",
+    "image": "/img/unsplash-bird.jpg"
   },
 
   {
     "id": 2,
-    "title": "Guts Berserk",
+    "title": "Abstract",
     "category": "Shirt",
-    "projects": "Personal",
+    "projects": "August 2025",
     "date": "2025-06-15",
-    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
-    "image": "/img/Guts.jpg"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at diam magna. Nulla facilisi. Fusce euismod elementum magna in porttitor. Vestibulum faucibus ipsum ipsum, at dignissim quam dapibus eget. Aenean ante nunc, elementum non feugiat sit amet, consequat quis massa. Praesent id facilisis orci. Proin eget turpis ac turpis feugiat convallis. Curabitur sagittis magna eget felis euismod porta.",
+    "image": "/img/unsplash-bird.jpg"
   },
   {
     "id": 3,
-    "title": "Miyamoto Musashi",
+    "title": "Abstract",
     "category": "Shirt",
-    "projects": "Personal",
+    "projects": "August 2025",
     "date": "2025-06-15",
-    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
-    "image": "/img/Miyamoto.jpg"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at diam magna. Nulla facilisi. Fusce euismod elementum magna in porttitor. Vestibulum faucibus ipsum ipsum, at dignissim quam dapibus eget. Aenean ante nunc, elementum non feugiat sit amet, consequat quis massa. Praesent id facilisis orci. Proin eget turpis ac turpis feugiat convallis. Curabitur sagittis magna eget felis euismod porta.",
+    "image": "/img/unsplash-bird.jpg"
   },
   {
     "id": 4,
-    "title": "Adaptation",
+    "title": "Abstract",
     "category": "Shirt",
-    "projects": "Personal",
+    "projects": "August 2025",
     "date": "2025-06-15",
-    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
-    "image": "/img/Adapt.jpg"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at diam magna. Nulla facilisi. Fusce euismod elementum magna in porttitor. Vestibulum faucibus ipsum ipsum, at dignissim quam dapibus eget. Aenean ante nunc, elementum non feugiat sit amet, consequat quis massa. Praesent id facilisis orci. Proin eget turpis ac turpis feugiat convallis. Curabitur sagittis magna eget felis euismod porta.",
+    "image": "/img/unsplash-bird.jpg"
   },
   {
     "id": 5,
-    "title": "Revolution Shirt",
+    "title": "Abstract",
     "category": "Shirt",
-    "projects": "Personal",
+    "projects": "August 2025",
     "date": "2025-06-15",
-    "description": "I love bringing ideas to life through clean code and thoughtful design — making every project simple, smooth, and visually satisfying. For me, it’s all about blending creativity with function, crafting digital experiences that not only look great but also feel intuitive and enjoyable to use.",
-    "image": "/img/baju.png"
+    "description": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Maecenas at diam magna. Nulla facilisi. Fusce euismod elementum magna in porttitor. Vestibulum faucibus ipsum ipsum, at dignissim quam dapibus eget. Aenean ante nunc, elementum non feugiat sit amet, consequat quis massa. Praesent id facilisis orci. Proin eget turpis ac turpis feugiat convallis. Curabitur sagittis magna eget felis euismod porta.",
+    "image": "/img/unsplash-bird.jpg"
   }
 ]

@@ -17,7 +17,8 @@ const LinkText = forwardRef(
       offsetY = 300,
       className = "",
       splitType = "lines",
-      enableAnimation = true, 
+      enableAnimation = true,
+      enableOpacity = true, // NEW
     },
     ref,
   ) => {
@@ -28,6 +29,8 @@ const LinkText = forwardRef(
     const { isMobile } = useDevice();
 
     const shouldAnimate = enableAnimation;
+
+    const getAlpha = () => (enableOpacity ? 0 : 1);
 
     /* =============================
        OPEN ANIMATION
@@ -45,7 +48,7 @@ const LinkText = forwardRef(
 
       const targets = splitInstance.current[splitType];
 
-      gsap.set(targets, { yPercent: offsetY, autoAlpha: 0 });
+      gsap.set(targets, { yPercent: offsetY, autoAlpha: getAlpha() });
       gsap.set([textRef.current, cloneRef.current], { autoAlpha: 1 });
 
       gsap.to(targets, {
@@ -80,7 +83,8 @@ const LinkText = forwardRef(
         duration,
         ease: "power2.in",
         stagger: staggerBack,
-        onComplete: () => gsap.set(textRef.current, { autoAlpha: 0 }),
+        autoAlpha: enableOpacity ? 0 : 1,
+        onComplete: () => gsap.set(textRef.current, { autoAlpha: enableOpacity ? 0 : 1 }),
       });
     };
 
@@ -110,8 +114,8 @@ const LinkText = forwardRef(
       });
 
       const targets = splitInstance.current[splitType];
-      gsap.set(targets, { yPercent: offsetY, autoAlpha: 0 });
-    }, [text, shouldAnimate]);
+      gsap.set(targets, { yPercent: offsetY, autoAlpha: getAlpha() });
+    }, [text, shouldAnimate, enableOpacity]);
 
     /* =============================
        HOVER (DESKTOP ONLY)
@@ -153,7 +157,7 @@ const LinkText = forwardRef(
         }
 
         gsap.set([textRef.current, cloneRef.current], {
-          autoAlpha: 0,
+          autoAlpha: enableOpacity ? 0 : 1,
         });
       },
       { scope: textRef },

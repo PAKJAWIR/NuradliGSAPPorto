@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from "react";
 // ─────────────────────────────────────────────────────────────
 const ProjectContext = createContext(null);
 
-export const ProjectProvider = ({ children }) => {
+export const ProjectProvider = ({ children }) => {  
   // ─────────────────────────────────────────────────────────────
   // DATA STATE
   // ─────────────────────────────────────────────────────────────

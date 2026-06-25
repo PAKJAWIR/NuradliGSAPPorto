@@ -1,215 +1,169 @@
-import { useState, useRef } from "react";
-import { useGSAP } from "@gsap/react";
+import { useRef } from "react";
+import { Plus } from "lucide-react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import LinkText from "../atoms/LinkText";
+import { useGSAP } from "@gsap/react";
+
+import { useDevice } from "../../context/DeviceProvider";
+import { useFaq } from "../../context/FaqContext";
 
 gsap.registerPlugin(ScrollTrigger);
 
+// ==========================================
+// CONSTANTS
+// ==========================================
+const CLIP_PATHS = {
+  top: "inset(0% 0% 100% 0%)",
+  bottom: "inset(100% 0% 0% 0%)",
+  full: "inset(0% 0% 0% 0%)",
+};
+
+const ANIM_CONFIG = {
+  ease: "power3.out",
+  enterDuration: 0.45,
+  leaveDuration: 0.35,
+  scrollEnterDuration: 0.6,
+  scrollLeaveDuration: 0.8,
+};
+
 function Faq() {
-  const container = useRef(null);
-  const textLeftRef = useRef(null);
-  const textItemsRef = useRef([]);
-  const Ref = useRef([]);
-  const contentRef = useRef([]);
-  const parIconsRef = useRef([]);
+  const { faqs, activeIndex, openFaq } = useFaq();
+  const { isMobile, isTablet } = useDevice();
 
-  const iconRef = useRef([]); // vertical line (yang turun jadi -)
+  // Flags & States
+  const enableHover = !isMobile && !isTablet;
+  const enableScrollTrigger = isMobile || isTablet;
 
-  const items = [
-    {
-      title: "How much does a website cost?",
-      desc: "Every site I make is 100% custom, so there’s no one-size-fits-all price tag. It really depends on what features you want, how complex the design is, and what the site needs to do. Once I get the full picture of your project, I’ll give you a quote that actually fits you — no random numbers, just real value.",
-    },
-    {
-      title: "What kind of services do you offer?",
-      desc: "I mainly focus on building clean, modern websites — from design to front-end development. I also create graphic designs for t-shirts, mockups, and digital posters, as well as UI/UX designs for apps and web interfaces. Basically, if it’s digital and needs a creative touch, I’m down for it.",
-    },
-    {
-      title: "How long does a project usually take?",
-      desc: "It really depends on the project’s size and complexity. A simple website might take a few weeks, while something bigger with animations and custom design could take a month or more. I always make sure the timeline feels realistic — quality > rush.",
-    },
-    {
-      title: "Can you help me redesign my existing website?",
-      desc: "Definitely. If you already have a website but it feels outdated or doesn’t reflect your brand anymore, I can help redesign it with a cleaner layout, smoother experience, and a modern touch.",
-    },
-    {
-      title: "Do you work with clients worldwide?",
-      desc: "Definitely. I collaborate remotely and make sure communication stays clear and structured, no matter the time zone.",
-    },
-    {
-      title: "Can I bring my own design?",
-      desc: "Yes. If you already have a design (Figma, etc.), I can focus purely on development and implementation with clean, scalable code.",
-    },
-  ];
+  const activeTriggerIndex = useRef(-1);
+  const lastIndex = useRef(-1);
 
-  const [activeIndex, setActiveIndex] = useState(null);
+  // DOM Refs
+  const itemsRef = useRef([]);
+  const overlayRefs = useRef([]);
 
-  const handleToggle = (index) => {
-    setActiveIndex((prev) => (prev === index ? null : index));
-  };
+  const { contextSafe } = useGSAP();
 
+  // ==========================================
+  // MOBILE + TABLET: SCROLLTRIGGER
+  // ==========================================
   useGSAP(
     () => {
-      if (!container.current) return;
+      if (faqs.length === 0) return;
 
-      const s = Ref.current.filter(Boolean);
-      const textItems = textItemsRef.current.filter(Boolean);
-      const contents = contentRef.current.filter(Boolean);
-
-      // initial state accordion
-      gsap.set(contents, {
-        height: 0,
-        overflow: "hidden",
+      // Reset state based on device capability
+      gsap.set(overlayRefs.current, {
+        scaleY: enableScrollTrigger ? 1 : 0,
+        clipPath: enableScrollTrigger ? CLIP_PATHS.top : "none",
+        autoAlpha: 1,
       });
 
-      // initial state icon (vertical line visible = +)
-      gsap.set(iconRef.current, {
-        transformOrigin: "center",
-      });
-      gsap.set(parIconsRef.current, {
-        yPercent: 300,
-      });
+      if (!enableScrollTrigger) return;
 
-      // intro animation
-      gsap.set(s, {
-        scaleX: 0,
-        transformOrigin: "left",
-      });
+      const triggers = [];
 
-      const tl = gsap.timeline({
-        scrollTrigger: {
-          trigger: container.current,
-          start: "center-=20% 95%",
-        },
-      });
+      overlayRefs.current.forEach((overlay, index) => {
+        const item = itemsRef.current[index];
+        if (!overlay || !item) return;
 
-      tl.call(() => {
-        textLeftRef.current?.animate?.();
-      })
-        .to(s, {
-          scaleX: 1,
-          duration: 1.1,
-          ease: "power3.out",
-          stagger: 0.15,
-        })
-        .call(
-          () => {
-            textItems.forEach((el) => el?.animate?.());
+        const trigger = ScrollTrigger.create({
+          trigger: item,
+          start: "top center-=10%",
+          end: "bottom center-=10%",
+
+          onEnter: () => {
+            activeTriggerIndex.current = index;
+            gsap.fromTo(overlay, { clipPath: CLIP_PATHS.top }, { clipPath: CLIP_PATHS.full, duration: ANIM_CONFIG.scrollEnterDuration, ease: ANIM_CONFIG.ease, overwrite: "auto" });
+            lastIndex.current = index;
           },
-          null,
-          ">-=0.85",
-        )
-
-        .to(
-          parIconsRef.current,
-          {
-            yPercent: 0,
-            duration: 1,
+          onLeave: () => {
+            gsap.to(overlay, { clipPath: CLIP_PATHS.bottom, duration: ANIM_CONFIG.scrollLeaveDuration, ease: ANIM_CONFIG.ease, overwrite: "auto" });
           },
-          ">+=0.3",
-        );
+          onEnterBack: () => {
+            activeTriggerIndex.current = index;
+            gsap.fromTo(overlay, { clipPath: CLIP_PATHS.bottom }, { clipPath: CLIP_PATHS.full, duration: ANIM_CONFIG.scrollLeaveDuration, ease: ANIM_CONFIG.ease, overwrite: "auto" });
+            lastIndex.current = index;
+          },
+          onLeaveBack: () => {
+            gsap.to(overlay, { clipPath: CLIP_PATHS.top, duration: ANIM_CONFIG.scrollEnterDuration, ease: ANIM_CONFIG.ease, overwrite: "auto" });
+          },
+        });
+
+        triggers.push(trigger);
+      });
+
+      ScrollTrigger.refresh();
+      return () => triggers.forEach((t) => t.kill());
     },
-    { scope: container },
+    { dependencies: [enableScrollTrigger, faqs] },
   );
 
-  // accordion + icon animation
-  useGSAP(() => {
-    contentRef.current.forEach((el, i) => {
-      if (!el) return;
+  // ==========================================
+  // DESKTOP: UNIFIED HOVER HANDLER (Enter & Leave)
+  // ==========================================
+  const handleHover = contextSafe((index, e) => {
+    if (!enableHover) return;
 
-      if (i === activeIndex) {
-        gsap.to(el, {
-          height: "auto",
-          duration: 1,
-          ease: "power3.out",
-        });
+    const overlay = overlayRefs.current[index];
+    const item = itemsRef.current[index];
+    if (!overlay || !item) return;
 
-        // vertical line turun (hilang) jadi -
-        gsap.to(iconRef.current[i], {
-          duration: 0.8,
-          rotate: 0,
+    // 1. Kalkulasi arah detektor mouse (Cukup tulis sekali di sini)
+    const rect = item.getBoundingClientRect();
+    const isFromTop = e.clientY < rect.top + rect.height / 2;
+    const targetClipPath = isFromTop ? CLIP_PATHS.top : CLIP_PATHS.bottom;
 
-          ease: "power2.out",
-        });
-      } else {
-        gsap.to(el, {
-          height: 0,
-          duration: 1,
-          ease: "power3.out",
-        });
-
-        // vertical line muncul lagi jadi +
-        gsap.to(iconRef.current[i], {
-          duration: 0.8,
-          rotate: 90,
-          opacity: 1,
-          ease: "power2.out",
-        });
-      }
-    });
-  }, [activeIndex]);
+    // 2. Cabang logika berdasarkan tipe event mouse
+    if (e.type === "mouseenter") {
+      gsap.set(overlay, { scaleY: 1 });
+      gsap.fromTo(overlay, { clipPath: targetClipPath }, { clipPath: CLIP_PATHS.full, duration: ANIM_CONFIG.enterDuration, ease: ANIM_CONFIG.ease, overwrite: "auto" });
+    } else if (e.type === "mouseleave") {
+      gsap.to(overlay, {
+        clipPath: targetClipPath,
+        duration: ANIM_CONFIG.leaveDuration,
+        ease: ANIM_CONFIG.ease,
+        overwrite: "auto",
+      });
+    }
+  });
 
   return (
-    <div ref={container} className="bg-warna1 h-screen w-screen flex items-center justify-center px-3 md:px-8 lg:px-15 ">
-      <div className="h-135 md:h-150 lg:h-135  w-full flex flex-col items-center justify-center gap-5 lg:flex-row  ">
-        <div className=" h-15 md:h-full w-full flex items-start justify-start ">
-          <LinkText ref={textLeftRef} duration={1.1} as="h1" className="text-2xl md:text-5xl font-bold w-full md:w-80 text-start uppercase" text="Frequently Asked Question" />
+    <section className="flex items-start justify-center h-dvh md:h-fit lg:h-screen w-screen p-4 md:p-6 bg-warna1">
+      <div className="flex flex-col md:gap-8 items-center justify-around md:justify-center lg:flex-row h-full w-full">
+        {/* TITLE SECTION */}
+        <div className="flex flex-col items-start justify-start md:justify-end h-[28vh] md:h-[20vh] lg:h-full w-full">
+          <div className="flex items-center md:items-start lg:items-center justify-start h-1/3 md:h-1/2 w-full">
+            <h2 className="text-sm uppercase text-warna2 font-bold">FAQ</h2>
+          </div>
+          <div className="flex flex-col gap-12 h-1/2 md:h-full w-full">
+            <h2 className="text-xl md:text-2xl lg:text-3xl font-bold">Have any questions?</h2>
+            <p className="text-xs md:text-sm w-[80%] md:w-[50%]">
+              If something sparks your curiosity, feel free to ask. Whether it is about my process, collaborations, or technical details behind the work, I am always open to thoughtful conversations.
+            </p>
+          </div>
         </div>
 
-        <div className=" h-100 md:h-full lg:h-full w-full md:w-150 lg:w-270  flex flex-col gap-1 justify-center lg:justify-start items-start ">
-          {items.map((item, index) => (
-            <div
-              key={index}
-              ref={(el) => {
-                Ref.current[index] = el;
-              }}
-              className="w-full border-b pb-1"
+        {/* FAQ LIST */}
+        <div className="flex flex-col items-center justify-center h-[54dvh] md:h-[40dvh] lg:h-full w-full">
+          {faqs.map((faq, index) => (
+            <button
+              key={faq.id || index}
+              ref={(el) => (itemsRef.current[index] = el)}
+              onClick={() => openFaq(index)}
+              onMouseEnter={(e) => handleHover(index, e)}
+              onMouseLeave={(e) => handleHover(index, e)}
+              className="relative z-1 flex items-center justify-between h-16 w-full overflow-hidden bg-warna1 p-2 lg:p-6 cursor-pointer"
             >
-              <button type="button" className="cursor-pointer w-full h-10 md:h-14 flex items-center justify-between text-left overflow-hidden" onClick={() => handleToggle(index)}>
-                <LinkText
-                  as="span"
-                  ref={(el) => {
-                    textItemsRef.current[index] = el;
-                  }}
-                  duration={1.5}
-                  className="font-semibold  text-sm md:text-xl "
-                  text={item.title}
-                />
+              {/* OVERLAY */}
+              <div ref={(el) => (overlayRefs.current[index] = el)} className="absolute inset-0 z-0 bg-warna3" />
 
-                {/* ICON + / - */}
-                <div
-                  ref={(el) => {
-                    parIconsRef.current[index] = el;
-                  }}
-                  className="relative w-6 h-6 flex items-center justify-center overflow-hidden"
-                >
-                  {/* horizontal line (selalu ada) */}
-                  <span className="absolute w-4 h-[1.5px] bg-warna2" />
-
-                  {/* vertical line (animasi turun jadi -) */}
-                  <span
-                    ref={(el) => {
-                      iconRef.current[index] = el;
-                    }}
-                    className="absolute w-4 h-[1.5px] bg-warna2 rotate-90 "
-                  />
-                </div>
-              </button>
-
-              <div
-                ref={(el) => {
-                  contentRef.current[index] = el;
-                }}
-                className="md:pb-1"
-              >
-                <p className="font-normal text-xs md:text-sm text-justify">{item.desc}</p>
-              </div>
-            </div>
+              {/* CONTENT */}
+              <h2 className="relative z-10 text-sm md:text-lg font-bold">{faq.title}</h2>
+              <Plus size={20} strokeWidth={2} className={`relative z-10 transition-transform duration-500 ${activeIndex === index ? "rotate-45" : "rotate-0"}`} />
+            </button>
           ))}
         </div>
       </div>
-    </div>
+    </section>
   );
 }
 

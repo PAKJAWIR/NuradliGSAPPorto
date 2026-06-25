@@ -1,7 +1,3 @@
-// ================================================
-// ButtonNav.jsx — Firefox-safe (wrapper + shape split)
-// ================================================
-
 import { useRef, useState, forwardRef, useImperativeHandle } from "react";
 import { useGSAP } from "@gsap/react";
 import gsap from "gsap";
@@ -22,12 +18,14 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
   const menuTextRef = useRef(null);
   const spanRef = useRef(null);
 
+  // FIX: Gunakan useRef agar tidak memicu re-render saat user sedang scrolling!
+  const activeClickType = useRef("btnClick");
+
   // --------------------------------------------------
   // State
   // --------------------------------------------------
   const [isOpen, setIsOpen] = useState(false);
   const [isAnimating, setIsAnimating] = useState(false);
-  const [activeClick, setActiveClick] = useState("btnClick");
 
   const menuItems = [
     { text: "Home", link: "/" },
@@ -45,13 +43,11 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         trigger: container.current,
         start: "center-=200 top",
         end: "top-=50 top",
-        toggleActions: "play none reverse none",
-
-        onEnter: () => setActiveClick("btnClickVer2"),
-        onLeaveBack: () => setActiveClick("btnClick"),
+        // Mengubah .current ref tidak membebani main-thread sama sekali
+        onEnter: () => (activeClickType.current = "btnClickVer2"),
+        onLeaveBack: () => (activeClickType.current = "btnClick"),
       });
 
-      // Wrapper: ukuran & posisi
       gsap.set(overlayWrapperRef.current, {
         width: "2.8rem",
         height: "2.8rem",
@@ -59,7 +55,6 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         willChange: "width, height, transform",
       });
 
-      // Shape: BULAT STABIL
       gsap.set(overlayShapeRef.current, {
         borderRadius: "50%",
       });
@@ -81,6 +76,8 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
       yPercent: direction === "up" ? 80 : 0,
       duration: 3,
       ease: "elastic.out(1, 0.7)",
+      overwrite: "auto",
+      lazy: true,
     });
   };
 
@@ -104,11 +101,13 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
     };
 
     if (next) {
-      // OPEN
       tl.to(overlayWrapperRef.current, {
-        duration: 1.5,
+        duration: 1.6,
         ease: "elastic.out(1, 1)",
-        ...overlayProps[activeClick],
+        overwrite: "auto",
+        lazy: true,
+        // Ambil nilai dari ref saat tombol diklik
+        ...overlayProps[activeClickType.current],
       });
 
       tl.to(
@@ -117,6 +116,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           borderRadius: "10%",
           duration: 1.5,
           ease: "elastic.out(1, 1)",
+          lazy: true,
         },
         0,
       );
@@ -130,7 +130,6 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         "-=1.3",
       );
     } else {
-      // CLOSE
       tl.call(() => {
         menuTextRef.current.animate2();
         menuRefs.current.forEach((ref) => ref.animate2());
@@ -144,6 +143,8 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           yPercent: 0,
           duration: 1.6,
           ease: "elastic.out(1, 1)",
+          overwrite: "auto",
+          lazy: true,
         },
         "+=0.45",
       );
@@ -154,6 +155,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
           borderRadius: "50%",
           duration: 1.6,
           ease: "elastic.out(1, 1)",
+          lazy: true,
         },
         "<",
       );
@@ -189,6 +191,8 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         yPercent: 0,
         duration: 1.6,
         ease: "elastic.out(1, 1)",
+        overwrite: "auto",
+        lazy: true,
       },
       "+=0.45",
     );
@@ -199,6 +203,7 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
         borderRadius: "50%",
         duration: 1.6,
         ease: "elastic.out(1, 1)",
+        lazy: true,
       },
       "<",
     );
@@ -215,23 +220,20 @@ const ButtonNav = forwardRef(({ onToggleOverlay }, ref) => {
   return (
     <div ref={container} className="relative w-full h-full">
       <div className="relative flex items-end justify-end h-full w-full p-5">
-        {/* OVERLAY WRAPPER (RESIZE) */}
         <div ref={overlayWrapperRef} className="absolute z-6">
-          {/* SHAPE (STABLE RADIUS) */}
           <div ref={overlayShapeRef} className="w-full h-full bg-warna2 shadow-sm shadow-warna2/30 overflow-hidden flex">
             <div className="flex flex-col gap-5 w-full h-full items-start justify-between p-5">
-              <LinkText ref={menuTextRef} duration={0.5} text="Menu" className="text-warna1/65 text-xs uppercase" />
+              <LinkText ref={menuTextRef} duration={0.8} text="Menu" className="text-warna1/65 text-xs uppercase" />
 
               <div className="flex flex-col gap-1">
                 {menuItems.map((item, i) => (
-                  <LinkText key={i} ref={(el) => (menuRefs.current[i] = el)} duration={0.5} text={item.text} link={item.link} className="text-warna1 text-xl uppercase font-normal" />
+                  <LinkText key={i} ref={(el) => (menuRefs.current[i] = el)} duration={0.8} text={item.text} link={item.link} className="text-warna1 text-xl uppercase font-normal" />
                 ))}
               </div>
             </div>
           </div>
         </div>
 
-        {/* MAIN BUTTON */}
         <SpanHoverAnimations ref={spanRef} className="absolute z-6 smooth-item flex items-center justify-center w-11 h-11" isClicked={isOpen} onClick={handleBtnClick} />
       </div>
     </div>

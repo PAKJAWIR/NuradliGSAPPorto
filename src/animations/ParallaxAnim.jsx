@@ -5,13 +5,27 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 gsap.registerPlugin(ScrollTrigger);
 
-function ParallaxAnim({ src = "", alt = "", className = "", containerClass = "", start = "top bottom", end = "bottom top", from = { yPercent: -20, scale: 1.05, rotateX: 5 }, to = { yPercent: 10, scale: 1, rotateX: 0 }, scrub = true }) {
+function ParallaxAnim({
+  src = "",
+  alt = "",
+  type = "image", // "image" | "video"
+  className = "",
+  containerClass = "",
+  start = "top bottom",
+  end = "bottom top",
+  from = { yPercent: -20, scale: 1.05, rotateX: 5 },
+  to = { yPercent: 10, scale: 1, rotateX: 0 },
+  scrub = true,
+  videoProps = {},
+}) {
   const containerRef = useRef(null);
-  const imgRef = useRef(null);
+  const mediaRef = useRef(null);
 
   useGSAP(
     () => {
-      gsap.fromTo(imgRef.current, from, {
+      if (!mediaRef.current) return;
+
+      gsap.fromTo(mediaRef.current, from, {
         ...to,
         ease: "none",
         transformOrigin: "center bottom",
@@ -23,14 +37,18 @@ function ParallaxAnim({ src = "", alt = "", className = "", containerClass = "",
         },
       });
     },
-    { scope: containerRef }
+    { scope: containerRef },
   );
 
   return (
-    // 💡DEV NOTE PENTING: Ukuran container WAJIB LEBIH KECIL dari isi (gambar),
-    // supaya efek depth illusion / parallax benar-benar terasa saat discroll.
     <div ref={containerRef} className={`relative overflow-hidden ${containerClass}`}>
-      <img ref={imgRef} src={src} alt={alt} className={`absolute object-cover ${className}`} />
+      {type === "video" ? (
+        <video ref={mediaRef} className={`absolute object-cover ${className}`} autoPlay muted loop playsInline {...videoProps}>
+          <source src={src} />
+        </video>
+      ) : (
+        <img ref={mediaRef} src={src} alt={alt} className={`absolute object-cover ${className}`} />
+      )}
     </div>
   );
 }

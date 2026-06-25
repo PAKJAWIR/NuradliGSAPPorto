@@ -20,7 +20,7 @@
   /*  Warna global */
   --warna1: #fffffc;
   --warna2: #001011;
-  --warna3: #001f54;
+  --warna3: #f5f5f5;
 }
 
 @layer utilities {
@@ -88,12 +88,16 @@ a {
 }
 
 /* Headlines */
-h1,
+h1 {
+  font-family: var(--font-custom);
+  letter-spacing: -4%;
+}
+
 h2,
 h3 {
-  font-family: var(--font-headline);
-  line-height: 100%; 
-  letter-spacing: -0.04em; 
+  font-family: var(--font-custom);
+  line-height: 100%;
+  letter-spacing: -4%;
 }
 
 /* Paragraphs */
@@ -105,32 +109,24 @@ p {
 @theme {
   --color-warna1: #fffffc;
   --color-warna2: #001011;
-  --color-warna3: #001f54;
+  --color-warna3: #f5f5f5;
+  --breakpoint-md: 740px;
+  --breakpoint-tablet: 900px;
+  --breakpoint-lg: 1200px;
+  --breakpoint-xl: 1536px;
 }
 
 ::selection {
-  background: #212121;
+  background: #001011;
   color: #fffffc;
 }
 
-
-.footerme::selection {
+footer ::selection {
   background: #fffffc;
-  color: #212121;
+  color: #001011;
 }
 
-@keyframes marquee {
-  from {
-    transform: translateX(0%);
-  }
-  to {
-    transform: translateX(-50%);
-  }
-}
 
-.animate-marquee {
-  animation: marquee 15s linear infinite;
-}
 
 .highlight-bg {
   position: absolute;
